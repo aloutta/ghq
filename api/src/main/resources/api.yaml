@@ -1,0 +1,148 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: GHQ Master Data API
+  description: API for CRUD-Operations regarding master data
+  license:
+    name: MIT License
+servers:
+  - url: /api/v1
+    description: GHQ Master Data Server
+paths:
+  /countries:
+    get:
+      summary: List all countries
+      operationId: listCountries
+      x-spring-paginated: true
+      tags:
+        - countries
+      parameters:
+        - $ref: '#components/parameters/pageParam'
+        - $ref: '#components/parameters/sizeParam'
+        - $ref: '#components/parameters/sortParam'
+      responses:
+        '200':
+          description: A page of countries
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountryPage'
+  /countries/{countryId}:
+    get:
+      summary: Get a country by ID
+      operationId: getCountry
+      parameters:
+        - name: countryId
+          in: path
+          required: true
+          description: The ID of the country to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A country object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Country'
+components:
+  parameters:
+    pageParam:
+      in: query
+      name: page
+      schema:
+        type: integer
+      description: Zero-based page index (0..N)
+    sizeParam:
+      in: query
+      name: size
+      schema:
+        type: integer
+      description: The size of the page to be returned
+    sortParam:
+      in: query
+      name: sort
+      schema:
+        type: array
+        items:
+          type: string
+      description: >-
+        Sorting criteria in the format: property,(asc|desc).
+        Default sort order is ascending.
+        Multiple sort criteria are supported.
+  schemas:
+    Country:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        alpha2:
+          type: string
+          maxLength: 2
+        alpha3:
+          type: string
+          maxLength: 3
+    CountryPage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Country'
+    PaginationResponse:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+          default: 0
+        totalPages:
+          type: integer
+          default: 0
+        sort:
+          $ref: '#/components/schemas/Sort'
+        first:
+          type: boolean
+        last:
+          type: boolean
+        number:
+          type: integer
+        pageable:
+          $ref: '#/components/schemas/Pageable'
+        numberOfElements:
+          type: integer
+        size:
+          type: integer
+        empty:
+          type: boolean
+        content:
+          type: array
+          items: { }
+    Pageable:
+      type: object
+      format: pageable
+      properties:
+        page:
+          type: integer
+          minimum: 0
+        size:
+          type: integer
+          minimum: 1
+        sort:
+          type: array
+          items:
+            type: string
+    Sort:
+      type: object
+      format: sort
+      properties:
+        sorted:
+          type: boolean
+        unsorted:
+          type: boolean
+        empty:
+          type: boolean
