@@ -2,7 +2,9 @@ openapi: 3.0.0
 info:
   version: 0.0.1
   title: GHQ Master Data API
-  description: API for CRUD-Operations regarding master data
+  description: >-
+    Read-only API to load gaming master data.
+    Also includes default Spring Boot Actuator endpoints not documented here.
   license:
     name: MIT License
 servers:
@@ -16,10 +18,6 @@ paths:
       x-spring-paginated: true
       tags:
         - countries
-      parameters:
-        - $ref: '#components/parameters/pageParam'
-        - $ref: '#components/parameters/sizeParam'
-        - $ref: '#components/parameters/sortParam'
       responses:
         '200':
           description: A page of countries
@@ -31,6 +29,8 @@ paths:
     get:
       summary: Get a country by ID
       operationId: getCountry
+      tags:
+        - countries
       parameters:
         - name: countryId
           in: path
@@ -46,31 +46,401 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Country'
+  /developers:
+    get:
+      summary: List all developers
+      operationId: listDevelopers
+      x-spring-paginated: true
+      tags:
+        - developers
+      responses:
+        '200':
+          description: A
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeveloperPage'
+  /developers/{developerId}:
+    get:
+      summary: Get a developer by ID
+      operationId: getDeveloper
+      tags:
+        - developers
+      parameters:
+        - name: developerId
+          in: path
+          required: true
+          description: The ID of the developer to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A country object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Developer'
+  /dlcs:
+    get:
+      summary: List all dlcs
+      operationId: listDlcs
+      x-spring-paginated: true
+      tags:
+        - dlcs
+      parameters:
+        - in: query
+          name: gameId
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/toParam'
+      responses:
+        '200':
+          description: A
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeveloperPage'
+  /dlcs/{dlcId}:
+    get:
+      summary: Get a DLC by ID
+      operationId: getDLC
+      tags:
+        - dlcs
+      parameters:
+        - name: dlcId
+          in: path
+          required: true
+          description: The ID of the DLC to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A DLC object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DLC'
+  /games:
+    get:
+      summary: List all games
+      operationId: listGames
+      x-spring-paginated: true
+      tags:
+        - games
+      parameters:
+        - in: query
+          name: developerId
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/toParam'
+      responses:
+        '200':
+          description: A
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GamePage'
+  /games/{gameId}:
+    get:
+      summary: Get a game by ID
+      operationId: getGame
+      tags:
+        - games
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          description: The ID of the game to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A game object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Game'
+  /genres:
+    get:
+      summary: List all genres
+      operationId: listGenres
+      x-spring-paginated: true
+      tags:
+        - genres
+      parameters:
+        - in: query
+          name: gameId
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/toParam'
+      responses:
+        '200':
+          description: A
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GamePage'
+  /genres/{genreId}:
+    get:
+      summary: Get a genre by ID
+      operationId: getGenre
+      tags:
+        - genres
+      parameters:
+        - name: genreId
+          in: path
+          required: true
+          description: The ID of the genre to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A genre object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Genre'
+  /platforms:
+    get:
+      summary: List all platforms
+      operationId: listPlatforms
+      x-spring-paginated: true
+      tags:
+        - platforms
+      parameters:
+        - in: query
+          name: gameId
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/toParam'
+      responses:
+        '200':
+          description: A
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformPage'
+  /platforms/{platformId}:
+    get:
+      summary: Get a platform by ID
+      operationId: getPlatform
+      tags:
+        - platforms
+      parameters:
+        - name: platformId
+          in: path
+          required: true
+          description: The ID of the platform to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A platform object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Platform'
+  /releases:
+    get:
+      summary: List all releases
+      operationId: listReleases
+      x-spring-paginated: true
+      tags:
+        - releases
+      parameters:
+        - in: query
+          name: gameId
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/toParam'
+      responses:
+        '200':
+          description: A
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReleasePage'
+  /releases/{releaseId}:
+    get:
+      summary: Get a release by ID
+      operationId: getReleases
+      tags:
+        - releases
+      parameters:
+        - name: releaseId
+          in: path
+          required: true
+          description: The ID of the release to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A release object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Release'
+  /screenshots:
+    get:
+      summary: List all screenshots
+      operationId: listScreenshots
+      x-spring-paginated: true
+      tags:
+        - screenshots
+      parameters:
+        - in: query
+          name: gameId
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/toParam'
+      responses:
+        '200':
+          description: A
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScreenshotPage'
+  /screenshots/{screenshotId}:
+    get:
+      summary: Get a screenshot by ID
+      operationId: getScreenshot
+      tags:
+        - screenshots
+      parameters:
+        - name: screenshotId
+          in: path
+          required: true
+          description: The ID of the screenshot to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A screenshot object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Screenshot'
+  /game-tags:
+    get:
+      summary: List all game tags
+      operationId: listGameTags
+      x-spring-paginated: true
+      tags:
+        - gameTags
+      parameters:
+        - in: query
+          name: gameId
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/toParam'
+      responses:
+        '200':
+          description: A
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameTagPage'
+  /game-tags/{gameTagId}:
+    get:
+      summary: Get a game tag by ID
+      operationId: getGameTag
+      tags:
+        - gameTags
+      parameters:
+        - name: gameTagId
+          in: path
+          required: true
+          description: The ID of the game tag to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A game tag object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GameTag'
+  /videos:
+    get:
+      summary: List all videos
+      operationId: listVideos
+      x-spring-paginated: true
+      tags:
+        - videos
+      parameters:
+        - in: query
+          name: gameId
+          schema:
+            type: integer
+            format: int64
+        - $ref: '#/components/parameters/fromParam'
+        - $ref: '#/components/parameters/toParam'
+      responses:
+        '200':
+          description: A
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VideoPage'
+  /videos/{videoId}:
+    get:
+      summary: Get a video by ID
+      operationId: getVideo
+      tags:
+        - videos
+      parameters:
+        - name: videoId
+          in: path
+          required: true
+          description: The ID of the video to retrieve
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A video object
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Video'
 components:
   parameters:
-    pageParam:
+    fromParam:
       in: query
-      name: page
+      name: form
       schema:
-        type: integer
-      description: Zero-based page index (0..N)
-    sizeParam:
+        type: string
+        format: date
+      description: Filter results equals or after this date.
+    toParam:
       in: query
-      name: size
+      name: to
       schema:
-        type: integer
-      description: The size of the page to be returned
-    sortParam:
-      in: query
-      name: sort
-      schema:
-        type: array
-        items:
-          type: string
-      description: >-
-        Sorting criteria in the format: property,(asc|desc).
-        Default sort order is ascending.
-        Multiple sort criteria are supported.
+        type: string
+        format: date
+      description: Filter results equals or before this date.
   schemas:
     Country:
       type: object
@@ -93,6 +463,185 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/Country'
+    Developer:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: integer
+          format: int64
+    DeveloperPage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Developer'
+    DLC:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        gameId:
+          type: integer
+          format: int64
+          description: The ID of the game this DLC belongs to.
+    DLCPage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/DLC'
+    Game:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        title:
+          type: string
+        developerId:
+          $ref: '#/components/schemas/Developer/properties/id'
+    GamePage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Game'
+    Genre:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    GenrePage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Genre'
+    Platform:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        manufacturer:
+          type: string
+    PlatformPage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Platform'
+    Release:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        date:
+          type: string
+          format: date
+        gameId:
+          $ref: '#/components/schemas/Game/properties/id'
+        dlcId:
+          $ref: '#/components/schemas/DLC/properties/id'
+        countryId:
+          $ref: '#/components/schemas/Country/properties/id'
+    ReleasePage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Release'
+    Screenshot:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        url:
+          type: string
+        gameId:
+          $ref: '#/components/schemas/Game/properties/id'
+        dlcId:
+          $ref: '#/components/schemas/DLC/properties/id'
+    ScreenshotPage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Screenshot'
+    GameTag:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        gameId:
+          $ref: '#/components/schemas/Game/properties/id'
+    GameTagPage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/GameTag'
+    Video:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        url:
+          type: string
+        gameId:
+          $ref: '#/components/schemas/Game/properties/id'
+        dlcId:
+          $ref: '#/components/schemas/DLC/properties/id'
+    VideoPage:
+      allOf:
+        - $ref: '#/components/schemas/PaginationResponse'
+        - type: object
+          properties:
+            content:
+              type: array
+              items:
+                $ref: '#/components/schemas/Video'
     PaginationResponse:
       type: object
       properties:
