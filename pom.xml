@@ -19,7 +19,7 @@
         <maven.compiler.target>22</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <revision>0.0.1-SNAPSHOT</revision>
-        <!-- dependencies versions -->
+        <!-- dependency versions -->
         <flyway.version>10.18.0</flyway.version>
         <jakarta.validation-api.version>3.1.0</jakarta.validation-api.version>
         <lombok.version>1.18.34</lombok.version>
@@ -29,7 +29,42 @@
         <spring-boot.version>3.3.3</spring-boot.version>
         <swagger.version>2.2.23</swagger.version>
         <testcontainers.version>1.20.1</testcontainers.version>
+        <!-- plugin versions -->
+        <jib-maven-plugin.version>3.4.3</jib-maven-plugin.version>
     </properties>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>com.google.cloud.tools</groupId>
+                    <artifactId>jib-maven-plugin</artifactId>
+                    <version>${jib-maven-plugin.version}</version>
+                    <executions>
+                        <execution>
+                            <id>build-docker-image</id>
+                            <phase>deploy</phase>
+                            <goals>
+                                <goal>build</goal>
+                            </goals>
+                            <configuration>
+                                <from>
+                                    <image>openjdk:17-jdk-alpine</image>
+                                </from>
+                                <to>
+                                    <image>ghcr.io/aloutta/ghq/${project.artifactId}</image>
+                                    <tags>
+                                        <tag>${project.version}</tag>
+                                        <tag>latest</tag>
+                                    </tags>
+                                </to>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 
     <dependencyManagement>
         <dependencies>

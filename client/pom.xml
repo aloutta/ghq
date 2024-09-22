@@ -6,15 +6,10 @@
     <parent>
         <groupId>com.github.aloutta.ghq</groupId>
         <artifactId>master-data</artifactId>
-        <version>0.0.1-SNAPSHOT</version>
+        <version>${revision}</version>
     </parent>
 
+    <packaging>jar</packaging>
     <artifactId>master-data-client</artifactId>
-
-    <properties>
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
 </project>

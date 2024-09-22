@@ -9,13 +9,44 @@
         <version>${revision}</version>
     </parent>
 
+    <packaging>jar</packaging>
     <artifactId>master-data-api</artifactId>
 
-    <properties>
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.openapitools</groupId>
+                <artifactId>openapi-generator-maven-plugin</artifactId>
+                <version>7.8.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
+                            <generatorName>spring</generatorName>
+                            <apiPackage>com.github.aloutta.ghq.persistence.api</apiPackage>
+                            <modelPackage>com.github.aloutta.ghq.persistence.model</modelPackage>
+                            <ignoreFileOverride>${project.basedir}/src/main/resources/.openapi-generator-ignore</ignoreFileOverride>
+                            <typeMappings>
+                                <typeMapping>object+pageable=Pageable</typeMapping>
+                                <typeMapping>object+sort=Sort</typeMapping>
+                            </typeMappings>
+                            <schemaMappings>
+                                <schemaMapping>Pageable=org.springframework.data.domain.Pageable</schemaMapping>
+                                <schemaMapping>Sort=org.springframework.data.domain.Sort</schemaMapping>
+                            </schemaMappings>
+                            <configOptions>
+                                <delegatePattern>true</delegatePattern>
+                                <useSpringBoot3>true</useSpringBoot3>
+                            </configOptions>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 
     <dependencies>
         <dependency>
@@ -58,39 +89,4 @@
         </dependency>
     </dependencies>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.openapitools</groupId>
-                <artifactId>openapi-generator-maven-plugin</artifactId>
-                <version>7.8.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <inputSpec>${project.basedir}/src/main/resources/api.yaml</inputSpec>
-                            <generatorName>spring</generatorName>
-                            <apiPackage>com.github.aloutta.ghq.persistence.api</apiPackage>
-                            <modelPackage>com.github.aloutta.ghq.persistence.model</modelPackage>
-                            <ignoreFileOverride>${project.basedir}/src/main/resources/.openapi-generator-ignore</ignoreFileOverride>
-                            <typeMappings>
-                                <typeMapping>object+pageable=Pageable</typeMapping>
-                                <typeMapping>object+sort=Sort</typeMapping>
-                            </typeMappings>
-                            <schemaMappings>
-                                <schemaMapping>Pageable=org.springframework.data.domain.Pageable</schemaMapping>
-                                <schemaMapping>Sort=org.springframework.data.domain.Sort</schemaMapping>
-                            </schemaMappings>
-                            <configOptions>
-                                <delegatePattern>true</delegatePattern>
-                                <useSpringBoot3>true</useSpringBoot3>
-                            </configOptions>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
 </project>
