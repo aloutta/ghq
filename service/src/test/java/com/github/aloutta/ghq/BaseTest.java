@@ -15,7 +15,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 public abstract class BaseTest {
 
   static PostgreSQLContainer<?> container =
-      new PostgreSQLContainer<>("postgres:latest")
+      new PostgreSQLContainer<>("postgres:16.4")
           .withDatabaseName("testdb")
           .withUsername("test")
           .withPassword("test");
